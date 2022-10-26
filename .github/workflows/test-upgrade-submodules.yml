@@ -1,0 +1,16 @@
+name: test-upgrade-submodules
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  verify_pull_request:
+    # if: github.actor == 'DevRel Bot'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get submodules
+        run: git submodule update --init --recursive
+      - name: Build
+        run: docker-compose build
+      - name: Run backend tests
+        run: docker-compose run api pytest
